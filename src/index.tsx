@@ -1,3 +1,4 @@
+import { CssBaseline } from "@mui/material";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider as UrqlProvider } from "urql";
@@ -14,6 +15,7 @@ if (rootElement) {
 
   root.render(
     <StrictMode>
+      <CssBaseline />
       <UrqlProvider value={client}>
         <TenCentsApp />
       </UrqlProvider>
