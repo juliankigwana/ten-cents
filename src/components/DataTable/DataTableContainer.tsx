@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import { Spinner, UnableToLoad } from "@/components";
 import { DataTableRepositoryFragment, useDataTableQuery } from "@/services";
 
 import { DataTableView } from "./DataTableView";
@@ -33,13 +34,14 @@ const DataTableContainer = () => {
 
   const handleRowsPerPageChange = (newPage: number) => setPageSize(newPage);
 
-  if (fetching && !data) return <>loading</>;
-  if (error) return <>error</>;
+  if (fetching && !data) return <Spinner />;
+  if (error) return <UnableToLoad />;
 
   const repositories = data?.search.edges?.map((edge) => edge?.node) as DataTableRepositoryFragment[];
 
   return (
     <DataTableView
+      fetching={fetching}
       onPageChange={handlePageChange}
       onRowsPerPageChange={handleRowsPerPageChange}
       page={page}

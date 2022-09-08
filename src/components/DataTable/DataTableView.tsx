@@ -2,6 +2,7 @@ import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagin
 import { makeStyles } from "@mui/styles";
 import { ChangeEvent, MouseEvent } from "react";
 
+import { Spinner } from "@/components";
 import { DataTableRepositoryFragment } from "@/services";
 
 import { TableBodyRow } from "./components";
@@ -13,6 +14,7 @@ type Props = {
   page: number;
   repositories: DataTableRepositoryFragment[];
   repositoryCount: number;
+  fetching: boolean;
 };
 
 const useStyles = makeStyles({
@@ -24,7 +26,7 @@ const useStyles = makeStyles({
   },
 });
 
-const DataTableView = ({ rowsPerPage, onPageChange, onRowsPerPageChange, page, repositories, repositoryCount }: Props) => {
+const DataTableView = ({ fetching, rowsPerPage, onPageChange, onRowsPerPageChange, page, repositories, repositoryCount }: Props) => {
   const classes = useStyles();
 
   const handlePageChange = (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -39,6 +41,7 @@ const DataTableView = ({ rowsPerPage, onPageChange, onRowsPerPageChange, page, r
 
   return (
     <Box display="flex" flexDirection="column" maxHeight="100%" overflow="hidden">
+      {fetching && <Spinner />}
       <TableContainer className={classes.tableContainer}>
         <Table aria-label="sticky table" stickyHeader>
           <TableHead>
