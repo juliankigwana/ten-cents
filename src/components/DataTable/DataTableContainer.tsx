@@ -16,11 +16,11 @@ const DataTableContainer = () => {
   const [page, setPage] = useState(0);
   const [activeSortField, setActiveSortField] = useState<string>("stargazerCount");
   const [query, setQuery] = useState(`is:public sort:${sortFieldsMap[activeSortField]}-desc`);
-  const mapPageToNextCursor = useRef<{ [page: number]: string }>({});
+  const mapPageToEndCursor = useRef<{ [page: number]: string }>({});
 
   const variables = useMemo(
     () => ({
-      after: mapPageToNextCursor.current[page - 1],
+      after: mapPageToEndCursor.current[page - 1],
       first: pageSize,
       query,
     }),
@@ -32,12 +32,13 @@ const DataTableContainer = () => {
   useEffect(() => {
     const endCursor = data?.search.pageInfo?.endCursor;
     if (!fetching && endCursor) {
-      mapPageToNextCursor.current[page] = endCursor;
+      mapPageToEndCursor.current[page] = endCursor;
     }
   }, [page, fetching, data?.search.pageInfo?.endCursor]);
 
   const handlePageChange = (newPage: number) => {
-    if (newPage === 0 || mapPageToNextCursor.current[newPage - 1]) setPage(newPage);
+    // The previous page has loaded so we can set the next page
+    if (newPage === 0 || mapPageToEndCursor.current[newPage - 1]) setPage(newPage);
   };
 
   const handleSortChange = (activeSort: string) => {
