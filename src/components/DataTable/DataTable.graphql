@@ -1,0 +1,21 @@
+fragment DataTableRepository on Repository {
+  id
+  name
+  stargazerCount
+  forkCount
+  url
+}
+
+query DataTable($query: String!, $first: Int, $after: String) {
+  search(query: $query, type: REPOSITORY, first: $first, after: $after) {
+    repositoryCount
+    pageInfo {
+      endCursor
+    }
+    edges {
+      node {
+        ...DataTableRepository
+      }
+    }
+  }
+}
