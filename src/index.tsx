@@ -1,6 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { Provider as UrqlProvider } from "urql";
 
+import { client } from "@/services";
 import { TenCentsApp } from "@/TenCentsApp";
 
 import { reportWebVitals } from "./reportWebVitals";
@@ -12,7 +14,9 @@ if (rootElement) {
 
   root.render(
     <StrictMode>
-      <TenCentsApp />
+      <UrqlProvider value={client}>
+        <TenCentsApp />
+      </UrqlProvider>
     </StrictMode>
   );
 }

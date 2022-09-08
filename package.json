@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "api:generate": "graphql-codegen --config codegen.yml",
     "build": "craco build",
     "eject": "react-scripts eject",
     "start": "craco start",
@@ -12,13 +13,20 @@
     "@testing-library/jest-dom": "5.14.1",
     "@testing-library/react": "13.0.0",
     "@testing-library/user-event": "13.2.1",
+    "graphql": "16.6.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-scripts": "5.0.1",
+    "urql": "2.0.5",
     "web-vitals": "2.1.0"
   },
   "devDependencies": {
     "@craco/craco": "6.2.0",
+    "@graphql-codegen/cli": "2.12.0",
+    "@graphql-codegen/introspection": "2.2.1",
+    "@graphql-codegen/typescript": "2.7.3",
+    "@graphql-codegen/typescript-operations": "2.5.3",
+    "@graphql-codegen/typescript-urql": "3.7.0",
     "@types/react": "18.0.18",
     "craco-alias": "3.0.1",
     "eslint-config-prettier": "8.5.0",
@@ -106,5 +114,6 @@
   },
   "prettier": {
     "printWidth": 160
-  }
+  },
+  "proxy": "https://api.github.com"
 }

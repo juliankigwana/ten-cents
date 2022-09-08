@@ -1,0 +1,16 @@
+overwrite: true
+schema: "https://docs.github.com/public/schema.docs.graphql"
+documents: "src/**/*.graphql"
+generates:
+  src/services/api.generated.tsx:
+    config:
+      withHooks: true
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-urql"
+  src/services/graphql.schema.json:
+    config:
+      minify: true
+    plugins:
+      - "introspection"
