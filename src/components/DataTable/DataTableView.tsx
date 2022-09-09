@@ -53,31 +53,33 @@ const DataTableView = ({
 
   return (
     <Box display="flex" flexDirection="column" maxHeight="100%" overflow="hidden">
-      {fetching && <Spinner />}
-      <TableContainer className={classes.tableContainer}>
-        <Table aria-label="sticky table" stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.tableCell}>
-                <TableSortLabel activeSortField={activeSortField} field="name" onSortClick={onSortChange}>
-                  Repository Name
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel activeSortField={activeSortField} field="stargazerCount" onSortClick={onSortChange}>
-                  Stars
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel activeSortField={activeSortField} field="forkCount" onSortClick={onSortChange}>
-                  Forks
-                </TableSortLabel>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>{tableBodyRows}</TableBody>
-        </Table>
-      </TableContainer>
+      <Box display="flex" overflow="auto" position="relative">
+        {fetching && <Spinner />}
+        <TableContainer className={classes.tableContainer}>
+          <Table aria-label="sticky table" stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell className={classes.tableCell}>
+                  <TableSortLabel activeSortField={activeSortField} field="name" onSortClick={onSortChange}>
+                    Repository Name
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>
+                  <TableSortLabel activeSortField={activeSortField} field="stargazerCount" onSortClick={onSortChange}>
+                    Stars
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>
+                  <TableSortLabel activeSortField={activeSortField} field="forkCount" onSortClick={onSortChange}>
+                    Forks
+                  </TableSortLabel>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>{tableBodyRows}</TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
       <TablePagination
         component={Box}
         count={repositoryCount}
