@@ -17,7 +17,6 @@ type SetupOptions = {
 };
 
 const expectedValues = {
-  activeSortField: "stargazerCount",
   fetching: false,
   onPageChange: expect.any(Function),
   onRowsPerPageChange: expect.any(Function),
@@ -26,6 +25,7 @@ const expectedValues = {
   repositories: data.search.edges?.map((edge) => edge?.node) as DataTableRepositoryFragment[],
   repositoryCount: data.search.repositoryCount,
   rowsPerPage: 10,
+  sortField: "stargazerCount",
 };
 
 const setup = (options?: Partial<SetupOptions>) => {

@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState } from "react";
 
 import { Spinner, UnableToLoad } from "@/components";
 import { DataTableRepositoryFragment, useDataTableQuery } from "@/services";
 
+import { SortDirectionEnum } from "./";
 import { DataTableView } from "./DataTableView";
 
-const sortFieldsMap: { [key: string]: string } = {
+const sortFieldMap: { [key: string]: string } = {
   name: "name",
   stargazerCount: "stars",
   forkCount: "forks",
@@ -14,41 +15,35 @@ const sortFieldsMap: { [key: string]: string } = {
 const DataTableContainer = () => {
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
-  const [activeSortField, setActiveSortField] = useState<string>("stargazerCount");
-  const [query, setQuery] = useState(`is:public sort:${sortFieldsMap[activeSortField]}-desc`);
-  const mapPageToEndCursor = useRef<{ [page: number]: string }>({});
+  const [sortField, setSortField] = useState<string>("stargazerCount");
+  const [query, setQuery] = useState(`is:public sort:${sortFieldMap[sortField]}-desc`);
+  const [endCursor, setEndCursor] = useState<string | undefined>(undefined);
 
-  const variables = useMemo(
-    () => ({
-      after: mapPageToEndCursor.current[page - 1],
+  const [{ data, fetching, error }] = useDataTableQuery({
+    variables: {
+      after: endCursor,
       first: pageSize,
       query,
-    }),
-    [page, pageSize, query]
-  );
-
-  const [{ data, fetching, error }] = useDataTableQuery({ variables });
-
-  useEffect(() => {
-    const endCursor = data?.search.pageInfo?.endCursor;
-    if (!fetching && endCursor) {
-      mapPageToEndCursor.current[page] = endCursor;
-    }
-  }, [page, fetching, data?.search.pageInfo?.endCursor]);
+    },
+  });
 
   const handlePageChange = (newPage: number) => {
-    // The previous page has loaded so we can set the next page
-    if (newPage === 0 || mapPageToEndCursor.current[newPage - 1]) setPage(newPage);
+    if (!fetching) {
+      setPage(newPage);
+      if (data?.search.pageInfo?.endCursor) {
+        setEndCursor(data?.search.pageInfo?.endCursor);
+      }
+    }
   };
 
-  const handleSortChange = (activeSort: string) => {
-    const sortField = sortFieldsMap[activeSort];
+  const handleSortChange = (newSortField: string, direction: SortDirectionEnum) => {
+    const sortFieldQuery = sortFieldMap[newSortField];
 
-    if (sortField) {
-      setQuery(`is:public sort:${sortField}-desc`);
+    if (sortFieldQuery) {
+      setQuery(`is:public sort:${sortFieldQuery}-${direction}`);
     }
 
-    setActiveSortField(activeSort);
+    setSortField(newSortField);
   };
 
   const handleRowsPerPageChange = (newPage: number) => setPageSize(newPage);
@@ -60,7 +55,6 @@ const DataTableContainer = () => {
 
   return (
     <DataTableView
-      activeSortField={activeSortField}
       fetching={fetching}
       onPageChange={handlePageChange}
       onRowsPerPageChange={handleRowsPerPageChange}
@@ -69,6 +63,7 @@ const DataTableContainer = () => {
       repositories={repositories || []}
       repositoryCount={data?.search.repositoryCount || 0}
       rowsPerPage={pageSize}
+      sortField={sortField}
     />
   );
 };
