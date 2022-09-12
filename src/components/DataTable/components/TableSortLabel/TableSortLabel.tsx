@@ -1,18 +1,37 @@
 import { TableSortLabel as MuiTableSortLabel } from "@mui/material";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
+
+import { SortDirectionEnum } from "../../";
 
 type Props = {
-  activeSortField: string;
-  field: string;
-  onSortClick: (field: string) => void;
   children: ReactNode;
+  field: string;
+  onSortClick: (sortField: string, direction: SortDirectionEnum) => void;
+  sortField: string;
 };
 
-const TableSortLabel = ({ activeSortField, field, onSortClick, children }: Props) => {
-  const handleClick = () => onSortClick(field);
+const TableSortLabel = ({ children, field, onSortClick, sortField }: Props) => {
+  const [direction, setDirection] = useState(SortDirectionEnum.Descending);
+
+  useEffect(() => {
+    if (field !== sortField) {
+      setDirection(SortDirectionEnum.Descending);
+    }
+  }, [sortField, field]);
+
+  const handleClick = () => {
+    if (field === sortField) {
+      const newDirection = direction === SortDirectionEnum.Descending ? SortDirectionEnum.Ascending : SortDirectionEnum.Descending;
+
+      onSortClick(field, newDirection);
+      setDirection(newDirection);
+    } else {
+      onSortClick(field, direction);
+    }
+  };
 
   return (
-    <MuiTableSortLabel active={field === activeSortField} direction="desc" onClick={handleClick}>
+    <MuiTableSortLabel active={field === sortField} direction={direction} onClick={handleClick}>
       {children}
     </MuiTableSortLabel>
   );

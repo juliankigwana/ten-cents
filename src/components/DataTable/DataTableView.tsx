@@ -5,18 +5,19 @@ import { ChangeEvent, MouseEvent } from "react";
 import { Spinner } from "@/components";
 import { DataTableRepositoryFragment } from "@/services";
 
+import { SortDirectionEnum } from "./";
 import { TableBodyRow, TableSortLabel } from "./components";
 
 type Props = {
-  activeSortField: string;
   fetching: boolean;
   onPageChange: (page: number) => void;
   onRowsPerPageChange: (rowsPerPage: number) => void;
-  onSortChange: (activeSort: string) => void;
+  onSortChange: (sortField: string, direction: SortDirectionEnum) => void;
   page: number;
   repositories: DataTableRepositoryFragment[];
   repositoryCount: number;
   rowsPerPage: number;
+  sortField: string;
 };
 
 const useStyles = makeStyles({
@@ -28,17 +29,7 @@ const useStyles = makeStyles({
   },
 });
 
-const DataTableView = ({
-  activeSortField,
-  fetching,
-  onPageChange,
-  onRowsPerPageChange,
-  onSortChange,
-  page,
-  repositories,
-  repositoryCount,
-  rowsPerPage,
-}: Props) => {
+const DataTableView = ({ fetching, onPageChange, onRowsPerPageChange, onSortChange, page, repositories, repositoryCount, rowsPerPage, sortField }: Props) => {
   const classes = useStyles();
 
   const handlePageChange = (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -60,17 +51,17 @@ const DataTableView = ({
             <TableHead>
               <TableRow>
                 <TableCell className={classes.tableCell}>
-                  <TableSortLabel activeSortField={activeSortField} field="name" onSortClick={onSortChange}>
+                  <TableSortLabel field="name" onSortClick={onSortChange} sortField={sortField}>
                     Repository Name
                   </TableSortLabel>
                 </TableCell>
                 <TableCell>
-                  <TableSortLabel activeSortField={activeSortField} field="stargazerCount" onSortClick={onSortChange}>
+                  <TableSortLabel field="stargazerCount" onSortClick={onSortChange} sortField={sortField}>
                     Stars
                   </TableSortLabel>
                 </TableCell>
                 <TableCell>
-                  <TableSortLabel activeSortField={activeSortField} field="forkCount" onSortClick={onSortChange}>
+                  <TableSortLabel field="forkCount" onSortClick={onSortChange} sortField={sortField}>
                     Forks
                   </TableSortLabel>
                 </TableCell>
