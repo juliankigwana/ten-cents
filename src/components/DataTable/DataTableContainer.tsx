@@ -41,9 +41,10 @@ const DataTableContainer = () => {
 
     if (sortFieldQuery) {
       setQuery(`React sort:${sortFieldQuery}-${direction}`);
+      setPage(0);
+      setEndCursor(undefined);
+      setSortField(newSortField);
     }
-
-    setSortField(newSortField);
   };
 
   const handleRowsPerPageChange = (newPage: number) => setPageSize(newPage);
