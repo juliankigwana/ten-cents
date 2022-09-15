@@ -16,7 +16,7 @@ const DataTableContainer = () => {
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
   const [sortField, setSortField] = useState<string>("stargazerCount");
-  const [query, setQuery] = useState(`is:public sort:${sortFieldMap[sortField]}-desc`);
+  const [query, setQuery] = useState("React");
   const [endCursor, setEndCursor] = useState<string | undefined>(undefined);
 
   const [{ data, fetching, error }] = useDataTableQuery({
@@ -40,7 +40,7 @@ const DataTableContainer = () => {
     const sortFieldQuery = sortFieldMap[newSortField];
 
     if (sortFieldQuery) {
-      setQuery(`is:public sort:${sortFieldQuery}-${direction}`);
+      setQuery(`React sort:${sortFieldQuery}-${direction}`);
     }
 
     setSortField(newSortField);
